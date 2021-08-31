@@ -1,0 +1,977 @@
+from tkinter import *
+from tkinter import messagebox
+from PIL import Image, ImageTk
+from pygame import mixer
+
+root = Tk()
+root2 = Tk()
+root2.withdraw()
+root.geometry('540x540+520+120')
+root.minsize(540, 540)
+root.maxsize(540, 540)
+root.title('Tic-Tac-Toe')
+pic = Image.open('Sprites\\tttback.jpg')
+same_pic = ImageTk.PhotoImage(pic)
+label_pic = Label(root, image=same_pic)
+label_pic.place(x=0, y=0, relwidth=1, relheight=1)
+p1_entry = Entry(root2, highlightthickness=5, highlightbackground='gold', font='Verdana 12')
+disp1 = Label(root2, font='Verdana 15 bold', fg='red', bg='black')
+disp3 = Label(root2, font='Verdana 15 bold', fg='red', bg='black')
+disp4 = Label(root2, font='Verdana 15 bold', fg='red', bg='black')
+vs = Label(root2, text='vs', font='Verdana 15 italic bold', fg='AntiqueWhite1', bg='black')
+p2_entry = Entry(root2, highlightthickness=5, highlightbackground='gold', font='Verdana 12')
+disp2 = Label(root2, font='Verdana 15 bold', fg='green2', bg='black')
+can3 = Canvas()
+x = True
+restricted_name = ''
+canum7 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum8 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum9 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum4 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum5 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum6 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum1 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum2 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+canum3 = Canvas(root2, bg='black', width=165, height=130, highlightthickness=0)
+occupied7 = False
+occupied8 = False
+occupied9 = False
+occupied4 = False
+occupied5 = False
+occupied6 = False
+occupied1 = False
+occupied2 = False
+occupied3 = False
+used_list = []
+turkey = True
+
+
+def change_song(*event):
+    mixer.music.stop()
+    mixer.music.load(r'OST\first.mp3')
+    mixer.music.play()
+
+
+def dual_player():
+    global x, can3, canum1, canum2, canum3, canum4, canum5, canum6, canum7, canum8, canum9, occupied1, occupied2, occupied3, occupied4, occupied5, occupied6, occupied7, occupied8, occupied9, used_list, p1_entry, p2_entry
+
+    def reset():
+        global x
+        root2.clipboard_clear()
+        disp1.place_forget()
+        disp2.place_forget()
+        x = True
+        dual_player()
+
+    mixer.music.stop()
+    mixer.music.load(r'OST\second.mp3')
+    mixer.music.play(-1)
+    root.withdraw()
+    root2.deiconify()
+    root2.focus_force()
+    root2.geometry('540x540+520+120')
+    root2.title('Tic-Tac-Toe')
+    root2.config(bg='black')
+    button_reset = Button(root2, text='RESET', font='Verdana 14', bg='OrangeRed2', activebackground='OrangeRed2', command=reset)
+    button_reset.place(x=8, y=8)
+    volume_on = PhotoImage(file=r'C:\Users\Ishan S Kshirsagar\PycharmProjects\pythonProject3\TicTacToe\Sprites\volumeup.png', master=root2)
+    volume_mute = PhotoImage(file=r'C:\Users\Ishan S Kshirsagar\PycharmProjects\pythonProject3\TicTacToe\Sprites\volumemute.png', master=root2)
+    can3.place_forget()
+    disp4.place_forget()
+    canum1.delete('all')
+    canum2.delete('all')
+    canum3.delete('all')
+    canum4.delete('all')
+    canum5.delete('all')
+    canum6.delete('all')
+    canum7.delete('all')
+    canum8.delete('all')
+    canum9.delete('all')
+    disp4.config(fg='red')
+    occupied7 = False
+    occupied8 = False
+    occupied9 = False
+    occupied4 = False
+    occupied5 = False
+    occupied6 = False
+    occupied1 = False
+    occupied2 = False
+    occupied3 = False
+    used_list.clear()
+
+    def blox(*event):
+        global can3, canum1, canum2, canum3, canum4, canum5, canum6, canum7, canum8, canum9
+        can3 = Canvas(root2, bg='black', width=530, height=420, highlightbackground='red', highlightthickness=0.6)
+        can3.place(x=3, y=110)
+        can3.create_line(177, 0, 177, 424, fill='red')
+        can3.create_line(354, 0, 354, 424, fill='red')
+        can3.create_line(0, 142, 530, 142, fill='red')
+        can3.create_line(0, 283, 530, 283, fill='red')
+        canum7 = Canvas(root2, bg='black', width=170, height=138.4, highlightthickness=0)
+        canum8 = Canvas(root2, bg='black', width=170, height=138.4, highlightthickness=0)
+        canum9 = Canvas(root2, bg='black', width=170, height=138.4, highlightthickness=0)
+        canum4 = Canvas(root2, bg='black', width=170, height=137.4, highlightthickness=0)
+        canum5 = Canvas(root2, bg='black', width=170, height=137.4, highlightthickness=0)
+        canum6 = Canvas(root2, bg='black', width=170, height=137.4, highlightthickness=0)
+        canum1 = Canvas(root2, bg='black', width=170, height=135.4, highlightthickness=0)
+        canum2 = Canvas(root2, bg='black', width=170, height=135.4, highlightthickness=0)
+        canum3 = Canvas(root2, bg='black', width=170, height=135.4, highlightthickness=0)
+        canum3.place(x=361.2, y=396.2)
+        canum2.place(x=184.2, y=396.2)
+        canum1.place(x=7, y=396.2)
+        canum6.place(x=361.2, y=255.9)
+        canum5.place(x=184.2, y=255.9)
+        canum4.place(x=7, y=255.9)
+        canum9.place(x=361.2, y=114)
+        canum8.place(x=184.2, y=114)
+        canum7.place(x=7, y=114)
+        messagebox.showinfo("How to play?", f"It's {p1_entry.get().capitalize()} vs {p2_entry.get().capitalize()}!\n{p1_entry.get().capitalize()} is X and {p2_entry.get().capitalize()} is O. To play, "
+                                            f"relate the Num Pad on your PC to the TicTacToe Table, i.e, 7 refers to the top left corner position "
+                                            f"on the table, meanwhile 3 refers to the bottom right corner position. Press the corresponding keys on "
+                                            f"the Num Pad to play the game. {p1_entry.get().capitalize()} goes first. Let the battle, begin!")
+
+        def check_winner():
+            global turkey
+            if 'x7' in used_list:
+                if 'x8' in used_list:
+                    if 'x9' in used_list:
+                        canum7.create_line(0, 65.8, 190, 65.8, fill='gold')
+                        canum8.create_line(0, 65.8, 190, 65.8, fill='gold')
+                        canum9.create_line(0, 65.8, 190, 65.8, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                if 'x4' in used_list:
+                    if 'x1' in used_list:
+                        canum7.create_line(82, 0, 82, 143, fill='gold')
+                        canum4.create_line(82, 0, 82, 143, fill='gold')
+                        canum1.create_line(82, 0, 82, 143, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'x4' in used_list:
+                if 'x5' in used_list:
+                    if 'x6' in used_list:
+                        canum4.create_line(0, 69.9, 190, 69.9, fill='gold')
+                        canum5.create_line(0, 69.9, 190, 69.9, fill='gold')
+                        canum6.create_line(0, 69.9, 190, 69.9, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'x1' in used_list:
+                if 'x2' in used_list:
+                    if 'x3' in used_list:
+                        canum1.create_line(0, 73.9, 190, 73.9, fill='gold')
+                        canum2.create_line(0, 73.9, 190, 73.9, fill='gold')
+                        canum3.create_line(0, 73.9, 190, 73.9, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y7' in used_list:
+                if 'y8' in used_list:
+                    if 'y9' in used_list:
+                        canum7.create_line(0, 65.8, 190, 65.8, fill='gold')
+                        canum8.create_line(0, 65.8, 190, 65.8, fill='gold')
+                        canum9.create_line(0, 65.8, 190, 65.8, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                if 'y4' in used_list:
+                    if 'y1' in used_list:
+                        canum7.create_line(82, 0, 82, 143, fill='gold')
+                        canum4.create_line(82, 0, 82, 143, fill='gold')
+                        canum1.create_line(82, 0, 82, 143, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y4' in used_list:
+                if 'y5' in used_list:
+                    if 'y6' in used_list:
+                        canum4.create_line(0, 69.9, 190, 69.9, fill='gold')
+                        canum5.create_line(0, 69.9, 190, 69.9, fill='gold')
+                        canum6.create_line(0, 69.9, 190, 69.9, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y1' in used_list:
+                if 'y2' in used_list:
+                    if 'y3' in used_list:
+                        canum1.create_line(0, 73.9, 190, 73.9, fill='gold')
+                        canum2.create_line(0, 73.9, 190, 73.9, fill='gold')
+                        canum3.create_line(0, 73.9, 190, 73.9, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'x8' in used_list:
+                if 'x5' in used_list:
+                    if 'x2' in used_list:
+                        canum8.create_line(87.5, 0, 87.5, 143, fill='gold')
+                        canum5.create_line(87.5, 0, 87.5, 143, fill='gold')
+                        canum2.create_line(87.5, 0, 87.5, 143, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'x9' in used_list:
+                if 'x6' in used_list:
+                    if 'x3' in used_list:
+                        canum9.create_line(90.5, 0, 90.5, 143, fill='gold')
+                        canum6.create_line(90.5, 0, 90.5, 143, fill='gold')
+                        canum3.create_line(90.5, 0, 90.5, 143, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y8' in used_list:
+                if 'y5' in used_list:
+                    if 'y2' in used_list:
+                        canum8.create_line(87.5, 0, 87.5, 143, fill='gold')
+                        canum5.create_line(87.5, 0, 87.5, 143, fill='gold')
+                        canum2.create_line(87.5, 0, 87.5, 143, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (0) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y9' in used_list:
+                if 'y6' in used_list:
+                    if 'y3' in used_list:
+                        canum9.create_line(90.5, 0, 90.5, 143, fill='gold')
+                        canum6.create_line(90.5, 0, 90.5, 143, fill='gold')
+                        canum3.create_line(90.5, 0, 90.5, 143, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'x7' in used_list:
+                if 'x5' in used_list:
+                    if 'x3' in used_list:
+                        canum7.create_line(0, 0, 181, 140, fill='gold')
+                        canum5.create_line(0, 0, 181, 140, fill='gold')
+                        canum3.create_line(0, 0, 181, 140, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y7' in used_list:
+                if 'y5' in used_list:
+                    if 'y3' in used_list:
+                        canum7.create_line(0, 0, 181, 140, fill='gold')
+                        canum5.create_line(0, 0, 181, 140, fill='gold')
+                        canum3.create_line(0, 0, 181, 140, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'x9' in used_list:
+                if 'x5' in used_list:
+                    if 'x1' in used_list:
+                        canum9.create_line(181, -4.5, -5.3, 140, fill='gold')
+                        canum5.create_line(181, -4.5, -5.3, 140, fill='gold')
+                        canum1.create_line(181, -4.5, -5.3, 140, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p1_entry.get()} (X) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p1_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p2_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if 'y9' in used_list:
+                if 'y5' in used_list:
+                    if 'y1' in used_list:
+                        canum9.create_line(181, -4.5, -5.3, 140, fill='gold')
+                        canum5.create_line(181, -4.5, -5.3, 140, fill='gold')
+                        canum1.create_line(181, -4.5, -5.3, 140, fill='gold')
+                        root2.unbind('7')
+                        root2.unbind('8')
+                        root2.unbind('9')
+                        root2.unbind('4')
+                        root2.unbind('5')
+                        root2.unbind('6')
+                        root2.unbind('1')
+                        root2.unbind('2')
+                        root2.unbind('3')
+                        can3.config(highlightbackground='gold')
+                        can3.create_line(177, 0, 177, 424, fill='gold')
+                        can3.create_line(354, 0, 354, 424, fill='gold')
+                        can3.create_line(0, 142, 530, 142, fill='gold')
+                        can3.create_line(0, 283, 530, 283, fill='gold')
+                        disp4.config(text=f"{p2_entry.get()} (O) wins!", fg='gold', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        turkey = True
+                        messagebox.showinfo('!WINNER!', f"{p2_entry.get().capitalize()} is the winner of this match!\nBetter luck next time, {p1_entry.get().capitalize()}!")
+                    else:
+                        turkey = False
+                else:
+                    turkey = False
+
+            if not turkey:
+                if len(used_list) == 9:
+                    messagebox.showinfo("Tie!", "It's a tie!\nBetter luck next time!")
+                    root2.unbind('7')
+                    root2.unbind('8')
+                    root2.unbind('9')
+                    root2.unbind('4')
+                    root2.unbind('5')
+                    root2.unbind('6')
+                    root2.unbind('1')
+                    root2.unbind('2')
+                    root2.unbind('3')
+                    can3.config(highlightbackground='gold')
+                    can3.create_line(177, 0, 177, 424, fill='gold')
+                    can3.create_line(354, 0, 354, 424, fill='gold')
+                    can3.create_line(0, 142, 530, 142, fill='gold')
+                    can3.create_line(0, 283, 530, 283, fill='gold')
+                    disp4.config(text=f"It's a tie!", fg='gold', bg='black')
+                    disp4.place(x=183, y=8.9)
+            else:
+                pass
+
+        def blit_xo(img, pos):
+            global canum1, canum2, canum3, canum4, canum5, canum6, canum7, canum8, canum9, occupied1, occupied2, occupied3, occupied4, occupied5, occupied6, occupied7, occupied8, occupied9, used_list
+            if img == 'x':
+                if pos == 7:
+                    if not occupied7:
+                        canum7.create_text(81.9, 61.8, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied7 = True
+                        used_list.append('x7')
+                        check_winner()
+                    elif occupied7:
+                        pass
+                elif pos == 8:
+                    if not occupied8:
+                        canum8.create_text(86.5, 61.8, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied8 = True
+                        used_list.append('x8')
+                        check_winner()
+                    elif occupied8:
+                        pass
+                elif pos == 9:
+                    if not occupied9:
+                        canum9.create_text(91.1, 61.8, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied9 = True
+                        used_list.append('x9')
+                        check_winner()
+                    elif occupied9:
+                        pass
+                elif pos == 4:
+                    if not occupied4:
+                        canum4.create_text(81.9, 69.3, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied4 = True
+                        used_list.append('x4')
+                        check_winner()
+                    elif occupied4:
+                        pass
+                elif pos == 5:
+                    if not occupied5:
+                        canum5.create_text(86.5, 69.3, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied5 = True
+                        used_list.append('x5')
+                        check_winner()
+                    elif occupied5:
+                        pass
+                elif pos == 6:
+                    if not occupied6:
+                        canum6.create_text(91.1, 69.3, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied6 = True
+                        used_list.append('x6')
+                        check_winner()
+                    elif occupied6:
+                        pass
+                elif pos == 1:
+                    if not occupied1:
+                        canum1.create_text(81.9, 76.8, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied1 = True
+                        used_list.append('x1')
+                        check_winner()
+                    elif occupied1:
+                        pass
+                elif pos == 2:
+                    if not occupied2:
+                        canum2.create_text(86.5, 76.8, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied2 = True
+                        used_list.append('x2')
+                        check_winner()
+                    elif occupied2:
+                        pass
+                elif pos == 3:
+                    if not occupied3:
+                        canum3.create_text(91.1, 76.8, fill='red', font='Verdana 65 bold', text='X')
+                        disp4.config(text=f"{p2_entry.get()} (O)'s turn!", fg='green2', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied3 = True
+                        used_list.append('x3')
+                        check_winner()
+                    elif occupied3:
+                        pass
+
+            elif img == 'y':
+                if pos == 7:
+                    if not occupied7:
+                        canum7.create_text(81.9, 62.85, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied7 = True
+                        used_list.append('y7')
+                        check_winner()
+                    elif occupied7:
+                        pass
+                elif pos == 8:
+                    if not occupied8:
+                        canum8.create_text(86.5, 62.85, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied8 = True
+                        used_list.append('y8')
+                        check_winner()
+                    elif occupied8:
+                        pass
+                elif pos == 9:
+                    if not occupied9:
+                        canum9.create_text(91.1, 62.85, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied9 = True
+                        used_list.append('y9')
+                        check_winner()
+                    elif occupied9:
+                        pass
+                elif pos == 4:
+                    if not occupied4:
+                        canum4.create_text(81.9, 70.35, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied4 = True
+                        used_list.append('y4')
+                        check_winner()
+                    elif occupied4:
+                        pass
+                elif pos == 5:
+                    if not occupied5:
+                        canum5.create_text(86.5, 70.35, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied5 = True
+                        used_list.append('y5')
+                        check_winner()
+                    elif occupied5:
+                        pass
+                elif pos == 6:
+                    if not occupied6:
+                        canum6.create_text(91.1, 70.35, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied6 = True
+                        used_list.append('y6')
+                        check_winner()
+                    elif occupied6:
+                        pass
+                elif pos == 1:
+                    if not occupied1:
+                        canum1.create_text(81.9, 77.85, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied1 = True
+                        used_list.append('y1')
+                        check_winner()
+                    elif occupied1:
+                        pass
+                elif pos == 2:
+                    if not occupied2:
+                        canum2.create_text(86.5, 77.85, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied2 = True
+                        used_list.append('y2')
+                        check_winner()
+                    elif occupied2:
+                        pass
+                elif pos == 3:
+                    if not occupied3:
+                        canum3.create_text(91.1, 77.85, fill='green2', font='Verdana 69 bold', text='O')
+                        disp4.config(text=f"{p1_entry.get()} (X)'s turn!", fg='red', bg='black')
+                        disp4.place(x=183, y=8.9)
+                        play_check()
+                        occupied3 = True
+                        used_list.append('y3')
+                        check_winner()
+                    elif occupied3:
+                        pass
+
+        def num_binder(img):
+            global x
+            if img == 'x':
+                root2.bind('7', lambda e: blit_xo('x', 7))
+                root2.bind('8', lambda e: blit_xo('x', 8))
+                root2.bind('9', lambda e: blit_xo('x', 9))
+                root2.bind('4', lambda e: blit_xo('x', 4))
+                root2.bind('5', lambda e: blit_xo('x', 5))
+                root2.bind('6', lambda e: blit_xo('x', 6))
+                root2.bind('1', lambda e: blit_xo('x', 1))
+                root2.bind('2', lambda e: blit_xo('x', 2))
+                root2.bind('3', lambda e: blit_xo('x', 3))
+                x = False
+            elif img == 'y':
+                root2.bind('7', lambda e: blit_xo('y', 7))
+                root2.bind('8', lambda e: blit_xo('y', 8))
+                root2.bind('9', lambda e: blit_xo('y', 9))
+                root2.bind('4', lambda e: blit_xo('y', 4))
+                root2.bind('5', lambda e: blit_xo('y', 5))
+                root2.bind('6', lambda e: blit_xo('y', 6))
+                root2.bind('1', lambda e: blit_xo('y', 1))
+                root2.bind('2', lambda e: blit_xo('y', 2))
+                root2.bind('3', lambda e: blit_xo('y', 3))
+                x = True
+
+        def play_check():
+            global x
+            if x:
+                num_binder('x')
+                can3.config(highlightbackground='red')
+                can3.create_line(177, 0, 177, 424, fill='red')
+                can3.create_line(354, 0, 354, 424, fill='red')
+                can3.create_line(0, 142, 530, 142, fill='red')
+                can3.create_line(0, 283, 530, 283, fill='red')
+            else:
+                num_binder('y')
+                can3.config(highlightbackground='green2')
+                can3.create_line(177, 0, 177, 424, fill='green2')
+                can3.create_line(354, 0, 354, 424, fill='green2')
+                can3.create_line(0, 142, 530, 142, fill='green2')
+                can3.create_line(0, 283, 530, 283, fill='green2')
+
+        play_check()
+
+    def resume2():
+        mixer.music.unpause()
+        button_song.config(image=volume_on, bg='green', activebackground='green', command=mute2)
+
+    def mute2():
+        mixer.music.pause()
+        button_song.config(image=volume_mute, bg='red', activebackground='red', command=resume2)
+
+    button_song = Button(root2, image=volume_on, bg='green', activebackground='green', command=mute2)
+    button_song.place(x=493, y=8.5)
+    can = Canvas(root2, bg='black', width=540, height=0.5)
+    can.create_line(0, 52, 540, 52, fill='red')
+    can.place(x=0, y=52)
+
+    def on_click(event):
+        p1_entry.config(state=NORMAL)
+        p1_entry.delete(0, END)
+        p1_entry.unbind('<Button-1>', placeholder1)
+
+        def confirm(event2):
+            p1_entry.place_forget()
+            disp1.config(text=f'{p1_entry.get()} (X)')
+            disp1.place(x=8, y=60)
+            vs.place(x=250, y=60)
+
+        p1_entry.bind('<Return>', confirm)
+
+    p1_entry.insert(0, "Enter Player 1's name...")
+    p1_entry.config(state=DISABLED)
+    placeholder1 = p1_entry.bind('<Button-1>', on_click)
+    p1_entry.place(x=8, y=60)
+
+    def on_click2(event):
+        p2_entry.config(state=NORMAL)
+        p2_entry.delete(0, END)
+        p2_entry.unbind('<Button-1>', placeholder2)
+
+        def confirm2(*event2):
+            global restricted_name
+            p2_entry.place_forget()
+            if len(p2_entry.get()) <= 8:
+                disp2.config(text=f'{p2_entry.get()} (O)')
+                disp2.place(x=385, y=60)
+                p2_entry.config(state=DISABLED)
+            else:
+                restricted_name = p2_entry.get()[0:8]
+                disp2.config(text=f'{restricted_name} (O)')
+                disp2.place(x=385, y=60)
+                p2_entry.config(state=DISABLED)
+            disp4.config(text=f"{p1_entry.get()} (X)'s turn!")
+            disp4.place(x=183, y=8.9)
+
+        p2_entry.bind('<Return>', lambda e: [confirm2(), blox()])
+
+    p2_entry.insert(0, "Enter Player 2's name...")
+    p2_entry.config(state=DISABLED)
+    placeholder2 = p2_entry.bind('<Button-1>', on_click2)
+    p2_entry.place(x=319, y=60)
+    can2 = Canvas(root2, bg='black', width=540, height=0.5)
+    can2.create_line(0, 95, 540, 95, fill='azure4')
+    can2.place(x=0, y=95)
+
+
+def mode(*event):
+    p1_entry.place_forget()
+    p2_entry.place_forget()
+    disp2.place_forget()
+    disp1.place_forget()
+    vs.place_forget()
+    root.deiconify()
+    root2.withdraw()
+    play_btn.place_forget()
+
+    def nxtver():
+        messagebox.showinfo("Work In Progress", "Single Player is not yet available. Sorry for the inconvenience!")
+
+    button_ai = Button(label_pic, text='Single Player', padx=24, pady=10, font='Verdana 15', bg='chartreuse2', activebackground='lawn green', command=nxtver)
+    button_ai.place(x=171, y=250)
+    button_dual = Button(label_pic, text='Dual Player', padx=32.5, pady=10, font='Verdana 15', bg='red2', activebackground='red')
+    button_dual.place(x=171, y=323)
+    button_dual.config(command=dual_player)
+
+
+play_btn = Button(label_pic, text='PLAY!', padx=15, pady=15, font='Verdana 15', bg='black', fg='grey', activebackground='black', activeforeground='grey')
+play_btn.place(x=220, y=450)
+play_btn.config(command=mode)
+music_mute = PhotoImage(file=r'C:\Users\Ishan S Kshirsagar\PycharmProjects\pythonProject3\TicTacToe\Sprites\volumemute.png')
+mixer.init()
+mixer.music.load(r'OST\first.mp3')
+mixer.music.play(-1)
+
+
+def resume(*event):
+    mixer.music.unpause()
+    music_btn.config(image=music_sprite, command=mute, bg='green', activebackground='green')
+
+
+def mute(*event):
+    mixer.music.pause()
+    music_btn.config(image=music_mute, command=resume, bg='red', activebackground='red')
+
+
+music_sprite = PhotoImage(file=r'C:\Users\Ishan S Kshirsagar\PycharmProjects\pythonProject3\TicTacToe\Sprites\volumeup.png')
+music_btn = Button(label_pic, image=music_sprite, bg='green', activebackground='green', command=mute)
+music_btn.place(x=489, y=9)
+
+
+def bye():
+    mixer.music.stop()
+    root.destroy()
+    root2.destroy()
+    exit()
+
+
+root2.protocol('WM_DELETE_WINDOW', bye)
+root.protocol('WM_DELETE_WINDOW', bye)
+root.mainloop()
